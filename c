@@ -36,7 +36,7 @@ int main()
 
 
 
-
+elementsearchold.cpp
 #include<iostream>
  using namespace std;
  
@@ -71,7 +71,7 @@ int main(){
 
 
 
-
+Prac1sumofn.cpp
 // This program is to compute the sum of the first n terms of the series:
 // S = 1 - 1/2^2 + 1/3^3 - 1/4^4 + --------------- 1/n^n
 #include<iostream>
@@ -103,7 +103,7 @@ int main()
 
 
 
-
+Prac2removeduplicatearray.cpp
  #include<iostream>
  using namespace std;
  
@@ -141,7 +141,7 @@ int main()
 
 
 
-
+Prac3stringoccurence.cpp
 #include<iostream>
 #include<string>
 using namespace std;
@@ -172,7 +172,7 @@ int main(){
 
 
 
-
+Prac5joinarray.cpp
 #include<iostream>
 #include<string>
  using namespace std;
@@ -221,7 +221,7 @@ int main(){
 
 
 
-
+Practical 4 string manipulation.cpp
 #include <iostream>
 #include<string.h>
 using namespace std;
@@ -419,7 +419,7 @@ void insertString(char* mainstr,char* substr,int loc){
 
 
 
-
+Practical 7gcd.cpp
 #include<iostream>
 using namespace std;
 
@@ -448,7 +448,7 @@ int main(){
 
 
 
-
+Practical 8matrix.cpp
 #include<iostream>
 using namespace std;
 
@@ -590,7 +590,7 @@ int main(){
 
 
 
-
+Practical 9Person.cpp
 #include <iostream>
 #include <cstring>
 using namespace std;
@@ -668,7 +668,7 @@ int main() {
 
 
 
-
+Practical 10triangle.cpp
 #include <iostream>
 #include <cmath>
 using namespace std;
@@ -720,7 +720,7 @@ int main() {
 
 
 
-
+Search element.txt
 include <iostream> 
 using namespace std; 
 int inputarray(int *); 
