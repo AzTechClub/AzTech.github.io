@@ -1,47 +1,421 @@
+DOUBLLLYYYY LINKEDDD LISSSTTTTT
 
-#include <cmath>
+
+#include <iostream>
 using namespace std;
 
-class Triangle {
-private:
-    double s1, s2, s3;
+class Node {
+public:
+    int key;
+    int data;
+    Node* next;
+    Node* prev;
 
-    bool valid() {
-        return (side1 > 0 && side2 > 0 && side3 > 0) &&
-               (side1 + side2 > side3) && (side2 + side3 > side1) && (side1 + side3 > side2);
+    Node() {
+        key = 0;
+        data = 0;
+        next = NULL;
+        prev = NULL;
     }
 
+    Node(int k, int d) {
+        key = k;
+        data = d;
+        next = NULL;
+        prev = NULL;
+    }
+};
+class doubly {
 public:
-    Triangle(double s1, double s2, double s3) : s1(s1), s2(s2), s3(s3) {
-        if (!isValid()) {
-            throw std::invalid_argument("Invalid sides for a triangle!");
+    Node* head;
+
+    doubly() {
+        head = NULL;
+    }
+
+    Node* checkifNodeexist(int k) {
+        Node* temp = head;
+        while (temp != NULL) {
+            if (temp->key == k) {
+                return temp;
+            }
+            temp = temp->next;
+        }
+        return NULL;
+    }
+
+    void appendnode(Node* n) {
+        if (checkifNodeexist(n->key) != NULL) {
+            cout << "Node already exists" << endl;
+        } else {
+            if (head == NULL) {
+                head = n;
+                cout << "Node appended as head node" << endl;
+            } else {
+                Node* ptr = head;
+                while (ptr->next != NULL) {
+                    ptr = ptr->next;
+                }
+                ptr->next = n;
+                n->prev = ptr;
+                cout << "Node appended" << endl;
+            }
         }
     }
 
-    double calculateArea() {
-        double s = (side1 + side2 + side3) / 2;
-        return sqrt(s * (s - side1) * (s - side2) * (s - side3));
+    void prepend(Node* n) {
+        if (checkifNodeexist(n->key) != NULL) {
+            cout << "Node already exists" << endl;
+        } else {
+            if (head == NULL) {
+                head = n;
+                cout << "Node prepended as head node" << endl;
+            } else {
+                head->prev = n;
+                n->next = head;
+                head = n;
+                cout << "Node prepended" << endl;
+            }
+        }
     }
 
-    double calculateArea(double base, double height) {
-        return (base * height) / 2;
+    void insertNode(int k, Node* n) {
+        Node* ptr = checkifNodeexist(k);
+        if (ptr == NULL) {
+            cout << "No node exists with key value " << k << endl;
+        } else {
+            if (checkifNodeexist(n->key) != NULL) {
+                cout << "Node already exists with this key" << endl;
+            } else {
+                Node* nextNode = ptr->next;
+                if (nextNode == NULL) { // Append at the end
+                    ptr->next = n;
+                    n->prev = ptr;
+                    cout << "Node appended at end" << endl;
+                } else { // Insert in between
+                    n->next = nextNode;
+                    nextNode->prev = n;
+                    n->prev = ptr;
+                    ptr->next = n;
+                    cout << "Node inserted in between" << endl;
+                }
+            }
+        }
+    }
+
+    void deletenode(int k) {
+        Node* ptr = checkifNodeexist(k);
+        if (ptr == NULL) {
+            cout << "Node does not exist" << endl;
+        } else {
+            if (head->key == k) { // Deleting head node
+                head = head->next;
+                if (head != NULL) {
+                    head->prev = NULL;
+                }
+                cout << "Node unlinked" << endl;
+            } else {
+                Node* nextNode = ptr->next;
+                Node* prevNode = ptr->prev;
+                if (nextNode == NULL) { // Deleting at the end
+                    prevNode->next = NULL;
+                    cout << "Node deleted at end" << endl;
+                } else { // Deleting in between
+                    prevNode->next = nextNode;
+                    nextNode->prev = prevNode;
+                    cout << "Node deleted in between" << endl;
+                }
+            }
+        }
+    }
+
+    void updateNode(int k, int d) {
+        Node* ptr = checkifNodeexist(k);
+        if (ptr != NULL) {
+            ptr->data = d;
+            cout << "Node data updated" << endl;
+        } else {
+            cout << "Node does not exist" << endl;
+        }
+    }
+
+    void printlist() {
+        if (head == NULL) {
+            cout << "No nodes in list" << endl;
+        } else {
+            cout << "Doubly list: ";
+            Node* temp = head;
+            while (temp != NULL) {
+                cout << "(" << temp->key << "," << temp->data << ") ";
+                temp = temp->next;
+            }
+            cout << endl;
+        }
+    }
+
+    // New Function: Check if an element exists and return its pointer
+    Node* findNode(int k) {
+        Node* temp = head;
+        while (temp != NULL) {
+            if (temp->key == k) {
+                return temp; // Return the pointer to the node
+            }
+            temp = temp->next;
+        }
+        return NULL; // Node not found
+    }
+    
+     void concatenate(doubly& secondList) {
+        if (head == NULL) { // If the first list is empty, just set head to second list's head
+            head = secondList.head;
+            secondList.head = NULL;
+            cout << "Lists concatenated: First list was empty" << endl;
+        } else {
+            Node* ptr = head;
+            while (ptr->next != NULL) { // Traverse to the last node of the first list
+                ptr = ptr->next;
+            }
+            ptr->next = secondList.head; // Link the last node of the first list to the head of the second list
+            if (secondList.head != NULL) {
+                secondList.head->prev = ptr; // Update the `prev` pointer of the second list's head
+            }
+            secondList.head = NULL; // Clear the second list
+            cout << "Lists concatenated successfully" << endl;
+        }
     }
 };
 
 int main() {
-    try {
-        Triangle rightTriangle(3, 4, 5);
-        double rightTriangleArea = rightTriangle.calculateArea(3, 4);
-        std::cout << "Area of right-angled triangle: " << rightTriangleArea << std::endl;
+    doubly list, list2;
+     Node* n1 = new Node(1, 10);
+    Node* n2 = new Node(2, 20);
+    Node* n3 = new Node(3, 30);
+    Node* n4= new Node(4,12);
+    Node* n8 = new Node(8,234);
+    list.appendnode(n1);
+    list.appendnode(n2);
+    cout<<"List:";
+    list.printlist();
+    list.prepend(n3);
+    cout<<"List:";
+    list.printlist();
+    list.insertNode(3,new Node(5,4));
+    cout<<"List:";
+    list.printlist();
+    list.deletenode(3);
+    list.updateNode(5,6);
+    cout<<"List:";
+    list.deletenode(1);
+    cout<<"List:";
+    
+    list2.appendnode(n8);
+    list.printlist();
+    list.printlist();;
+    
+    Node* k=list.findNode(3);
+    if(k!=NULL){
+    cout<<"Node found with element "<<k->data;
+    }
+    else
+    {
+        cout<<"Node does not exist"<<endl;
+    }
+    
+    list.concatenate(list2);
+    list.printlist();
 
-        Triangle generalTriangle(5, 6, 7);
-        double generalTriangleArea = generalTriangle.calculateArea();
-        std::cout << "Area of general triangle: " << generalTriangleArea << std::endl;
 
-        Triangle invalidTriangle(1, 2, 3);  // Invalid sides, will throw an exception
-    } catch (const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
+    return 0;
+}
+
+
+SINGGGGLLLLLYYYYY LINKEEEDDDD LISSTTTTTT
+
+
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int key;
+    int data;
+    Node* next;
+
+    Node()
+    { key=0;
+    data=0;
+    next=NULL;
+    }
+
+    Node(int k, int d){
+        key=k;
+        data=d;
+        next=NULL;
+    } 
+};
+
+class singly {
+public:
+    Node* head;
+
+    singly() : head(NULL) {}
+
+    singly(Node* n) : head(n) {}
+
+    Node* nodeexist(int k) {
+        Node* ptr = head;
+        while (ptr != NULL) {
+            if (ptr->key == k) {
+                return ptr;
+            }
+            ptr = ptr->next;
+        }
+        return NULL;
+    }
+
+    void append(Node* n) {
+        if (nodeexist(n->key) != NULL) {
+            cout << "Node with key " << n->key << " already exists. Append another node." << endl;
+            return;
+        }
+
+        if (head == NULL) {
+            head = n;
+            cout << "Node appended as head" << endl;
+        } else {
+            Node* ptr = head;
+            while (ptr->next != NULL) {
+                ptr = ptr->next;
+            }
+            ptr->next = n;
+            cout << "Node appended" << endl;
+        }
+    }
+
+    void prepend(Node* n) {
+        if (nodeexist(n->key) != NULL) {
+            cout << "Node with key " << n->key << " already exists. Prepend another node." << endl;
+            return;
+        }
+        n->next = head;
+        head = n;
+        cout << "Node prepended" << endl;
+    }
+
+    void insert(int k, Node* n) {
+        Node* ptr = nodeexist(k);
+        if (ptr == NULL) {
+            cout << "No node exists with key " << k << endl;
+            return;
+        }
+
+        if (nodeexist(n->key) != NULL) {
+            cout << "Node with key " << n->key << " already exists. Insert another node." << endl;
+            return;
+        }
+
+        n->next = ptr->next;
+        ptr->next = n;
+        cout << "Node inserted after key " << k << endl;
+    }
+
+    void deleteNode(int k) {
+        if (head == NULL) {
+            cout << "Single linked list is empty" << endl;
+            return;
+        }
+
+        if (head->key == k) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            cout << "Node with key " << k << " deleted" << endl;
+            return;
+        }
+
+        Node* prevptr = head;
+        Node* currptr = head->next;
+
+        while (currptr != NULL) {
+            if (currptr->key == k) {
+                prevptr->next = currptr->next;
+                delete currptr;
+                cout << "Node with key " << k << " deleted" << endl;
+                return;
+            }
+            prevptr = currptr;
+            currptr = currptr->next;
+        }
+
+        cout << "Node with key " << k << " not found" << endl;
+    }
+
+    void updatenode(int k, int d) {
+        Node* ptr = nodeexist(k);
+        if (ptr != NULL) {
+            ptr->data = d;
+            cout << "Node data updated for key " << k << endl;
+        } else {
+            cout << "Node with key " << k << " doesn't exist" << endl;
+        }
+    }
+
+    void printlist() {
+        if (head == NULL) {
+            cout << "No nodes in the list" << endl;
+            return;
+        }
+
+        cout << "List contents:" << endl;
+        Node* temp = head;
+        while (temp != NULL) {
+            cout << "(" << temp->key << ", " << temp->data << ") -> ";
+            temp = temp->next;
+        }
+        cout << "NULL" << endl;
+    }
+
+
+};
+int main()
+{
+    singly s;
+
+    Node* n1 = new Node(1, 10);
+    Node* n2 = new Node(1, 10);
+    Node* n3 = new Node(3, 30);
+
+    s.append(n1);
+    s.append(n2);
+    s.append(n3);
+
+    s.printlist();
+
+    s.prepend(new Node(6, 10));
+    s.printlist();
+
+    s.insert(2, new Node(4, 40));
+    s.printlist();
+
+    s.updatenode(1, 100);
+    s.printlist();
+
+    s.deleteNode(3);
+    s.deleteNode(6);
+    s.printlist();
+    Node* k=s.nodeexist(3);
+    if(k!=NULL)
+    {
+        cout<<("Node found with element ")<<k->data;
+    }
+    else
+    {
+        cout<<"Node does not exist";
     }
 
     return 0;
+    
+    
+
+
 }
