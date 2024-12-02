@@ -1,1935 +1,617 @@
-DOUBLLLYYYY LINKEDDD LISSSTTTTT
+*HERMET BEZIER*
 
 
+import numpy as np
+import matplotlib.pyplot as plt
 
-
-
-#include <iostream>
-using namespace std;
-
-class Node {
-public:
-    int key;
-    int data;
-    Node* next;
-    Node* prev;
-
-    Node() {
-        key = 0;
-        data = 0;
-        next = NULL;
-        prev = NULL;
-    }
-
-    Node(int k, int d) {
-        key = k;
-        data = d;
-        next = NULL;
-        prev = NULL;
-    }
-};
-class doubly {
-public:
-    Node* head;
-
-    doubly() {
-        head = NULL;
-    }
-
-    Node* checkifNodeexist(int k) {
-        Node* temp = head;
-        while (temp != NULL) {
-            if (temp->key == k) {
-                return temp;
-            }
-            temp = temp->next;
-        }
-        return NULL;
-    }
-
-    void appendnode(Node* n) {
-        if (checkifNodeexist(n->key) != NULL) {
-            cout << "Node already exists" << endl;
-        } else {
-            if (head == NULL) {
-                head = n;
-                cout << "Node appended as head node" << endl;
-            } else {
-                Node* ptr = head;
-                while (ptr->next != NULL) {
-                    ptr = ptr->next;
-                }
-                ptr->next = n;
-                n->prev = ptr;
-                cout << "Node appended" << endl;
-            }
-        }
-    }
-
-    void prepend(Node* n) {
-        if (checkifNodeexist(n->key) != NULL) {
-            cout << "Node already exists" << endl;
-        } else {
-            if (head == NULL) {
-                head = n;
-                cout << "Node prepended as head node" << endl;
-            } else {
-                head->prev = n;
-                n->next = head;
-                head = n;
-                cout << "Node prepended" << endl;
-            }
-        }
-    }
-
-    void insertNode(int k, Node* n) {
-        Node* ptr = checkifNodeexist(k);
-        if (ptr == NULL) {
-            cout << "No node exists with key value " << k << endl;
-        } else {
-            if (checkifNodeexist(n->key) != NULL) {
-                cout << "Node already exists with this key" << endl;
-            } else {
-                Node* nextNode = ptr->next;
-                if (nextNode == NULL) { // Append at the end
-                    ptr->next = n;
-                    n->prev = ptr;
-                    cout << "Node appended at end" << endl;
-                } else { // Insert in between
-                    n->next = nextNode;
-                    nextNode->prev = n;
-                    n->prev = ptr;
-                    ptr->next = n;
-                    cout << "Node inserted in between" << endl;
-                }
-            }
-        }
-    }
-
-    void deletenode(int k) {
-        Node* ptr = checkifNodeexist(k);
-        if (ptr == NULL) {
-            cout << "Node does not exist" << endl;
-        } else {
-            if (head->key == k) { // Deleting head node
-                head = head->next;
-                if (head != NULL) {
-                    head->prev = NULL;
-                }
-                cout << "Node unlinked" << endl;
-            } else {
-                Node* nextNode = ptr->next;
-                Node* prevNode = ptr->prev;
-                if (nextNode == NULL) { // Deleting at the end
-                    prevNode->next = NULL;
-                    cout << "Node deleted at end" << endl;
-                } else { // Deleting in between
-                    prevNode->next = nextNode;
-                    nextNode->prev = prevNode;
-                    cout << "Node deleted in between" << endl;
-                }
-            }
-        }
-    }
-
-    void updateNode(int k, int d) {
-        Node* ptr = checkifNodeexist(k);
-        if (ptr != NULL) {
-            ptr->data = d;
-            cout << "Node data updated" << endl;
-        } else {
-            cout << "Node does not exist" << endl;
-        }
-    }
-
-    void printlist() {
-        if (head == NULL) {
-            cout << "No nodes in list" << endl;
-        } else {
-            cout << "Doubly list: ";
-            Node* temp = head;
-            while (temp != NULL) {
-                cout << "(" << temp->key << "," << temp->data << ") ";
-                temp = temp->next;
-            }
-            cout << endl;
-        }
-    }
-
-    // New Function: Check if an element exists and return its pointer
-    Node* findNode(int k) {
-        Node* temp = head;
-        while (temp != NULL) {
-            if (temp->key == k) {
-                return temp; // Return the pointer to the node
-            }
-            temp = temp->next;
-        }
-        return NULL; // Node not found
-    }
+def hermite_curve(p1, p4, r1, r4, t):
+    """Generate points for a Hermite curve."""
+    h00 = 2*t**3 - 3*t**2 + 1
+    h10 = t**3 - 2*t**2 + t
+    h01 = -2*t**3 + 3*t**2
+    h11 = t**3 - t**2
     
-     void concatenate(doubly& secondList) {
-        if (head == NULL) { // If the first list is empty, just set head to second list's head
-            head = secondList.head;
-            secondList.head = NULL;
-            cout << "Lists concatenated: First list was empty" << endl;
-        } else {
-            Node* ptr = head;
-            while (ptr->next != NULL) { // Traverse to the last node of the first list
-                ptr = ptr->next;
-            }
-            ptr->next = secondList.head; // Link the last node of the first list to the head of the second list
-            if (secondList.head != NULL) {
-                secondList.head->prev = ptr; // Update the `prev` pointer of the second list's head
-            }
-            secondList.head = NULL; // Clear the second list
-            cout << "Lists concatenated successfully" << endl;
-        }
-    }
-};
-
-int main() {
-    doubly list, list2;
-     Node* n1 = new Node(1, 10);
-    Node* n2 = new Node(2, 20);
-    Node* n3 = new Node(3, 30);
-    Node* n4= new Node(4,12);
-    Node* n8 = new Node(8,234);
-    list.appendnode(n1);
-    list.appendnode(n2);
-    cout<<"List:";
-    list.printlist();
-    list.prepend(n3);
-    cout<<"List:";
-    list.printlist();
-    list.insertNode(3,new Node(5,4));
-    cout<<"List:";
-    list.printlist();
-    list.deletenode(3);
-    list.updateNode(5,6);
-    cout<<"List:";
-    list.deletenode(1);
-    cout<<"List:";
+    # Calculate the curve points
+    x = h00 * p1[0] + h10 * r1[0] + h01 * p4[0] + h11 * r4[0]
+    y = h00 * p1[1] + h10 * r1[1] + h01 * p4[1] + h11 * r4[1]
     
-    list2.appendnode(n8);
-    list.printlist();
-    list.printlist();;
+    return x, y
+
+def bezier_curve(p0, p1, p2, p3, t):
+    """Generate points for a cubic Bezier curve."""
+    B0 = (1 - t)**3
+    B1 = 3 * t * (1 - t)**2
+    B2 = 3 * t**2 * (1 - t)
+    B3 = t**3
     
-    Node* k=list.findNode(3);
-    if(k!=NULL){
-    cout<<"Node found with element "<<k->data;
-    }
-    else
-    {
-        cout<<"Node does not exist"<<endl;
-    }
+    # Calculate the curve points
+    x = B0 * p0[0] + B1 * p1[0] + B2 * p2[0] + B3 * p3[0]
+    y = B0 * p0[1] + B1 * p1[1] + B2 * p2[1] + B3 * p3[1]
     
-    list.concatenate(list2);
-    list.printlist();
+    return x, y
+
+# Hermite Curve Parameters
+p1 = [0, 0]  # Start point
+p4 = [4, 3]  # End point
+r1 = [3, 5]  # Tangent vector at start
+r4 = [-2, -4]  # Tangent vector at end
+
+# Bezier Curve Parameters
+p0 = [0, 0]  # Start point
+p1_b = [1, 2]  # Control point 1
+p2_b = [3, 3]  # Control point 2
+p3 = [4, 0]  # End point
+
+# Generate parameter t
+t = np.linspace(0, 1, 100)
+
+# Compute Hermite curve points
+hermite_x, hermite_y = hermite_curve(p1, p4, r1, r4, t)
+
+# Compute Bezier curve points
+bezier_x, bezier_y = bezier_curve(p0, p1_b, p2_b, p3, t)
+
+# Plot the curves
+plt.figure(figsize=(10, 6))
+
+# Hermite curve
+plt.plot(hermite_x, hermite_y, label="Hermite Curve", color="blue")
+plt.scatter([p1[0], p4[0]], [p1[1], p4[1]], color="blue", zorder=5, label="Hermite Points")
+
+# Bezier curve
+plt.plot(bezier_x, bezier_y, label="Bezier Curve", color="red")
+plt.scatter([p0[0], p1_b[0], p2_b[0], p3[0]], [p0[1], p1_b[1], p2_b[1], p3[1]], color="red", zorder=5, label="Bezier Points")
+
+# Styling the plot
+plt.title("Hermite and Bezier Curves")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.axhline(0, color="black", linewidth=0.5, linestyle="--")
+plt.axvline(0, color="black", linewidth=0.5, linestyle="--")
+plt.legend()
+plt.grid()
+plt.show()
 
 
-    return 0;
-}
 
 
-SINGGGGLLLLLYYYYY LINKEEEDDDD LISSTTTTTT
+*ELLIPSE*
 
 
+import matplotlib.pyplot as plt
 
-
-
-
-#include <iostream>
-using namespace std;
-
-class Node {
-public:
-    int key;
-    int data;
-    Node* next;
-
-    Node()
-    { key=0;
-    data=0;
-    next=NULL;
-    }
-
-    Node(int k, int d){
-        key=k;
-        data=d;
-        next=NULL;
-    } 
-};
-
-class singly {
-public:
-    Node* head;
-
-    singly() : head(NULL) {}
-
-    singly(Node* n) : head(n) {}
-
-    Node* nodeexist(int k) {
-        Node* ptr = head;
-        while (ptr != NULL) {
-            if (ptr->key == k) {
-                return ptr;
-            }
-            ptr = ptr->next;
-        }
-        return NULL;
-    }
-
-    void append(Node* n) {
-        if (nodeexist(n->key) != NULL) {
-            cout << "Node with key " << n->key << " already exists. Append another node." << endl;
-            return;
-        }
-
-        if (head == NULL) {
-            head = n;
-            cout << "Node appended as head" << endl;
-        } else {
-            Node* ptr = head;
-            while (ptr->next != NULL) {
-                ptr = ptr->next;
-            }
-            ptr->next = n;
-            cout << "Node appended" << endl;
-        }
-    }
-
-    void prepend(Node* n) {
-        if (nodeexist(n->key) != NULL) {
-            cout << "Node with key " << n->key << " already exists. Prepend another node." << endl;
-            return;
-        }
-        n->next = head;
-        head = n;
-        cout << "Node prepended" << endl;
-    }
-
-    void insert(int k, Node* n) {
-        Node* ptr = nodeexist(k);
-        if (ptr == NULL) {
-            cout << "No node exists with key " << k << endl;
-            return;
-        }
-
-        if (nodeexist(n->key) != NULL) {
-            cout << "Node with key " << n->key << " already exists. Insert another node." << endl;
-            return;
-        }
-
-        n->next = ptr->next;
-        ptr->next = n;
-        cout << "Node inserted after key " << k << endl;
-    }
-
-    void deleteNode(int k) {
-        if (head == NULL) {
-            cout << "Single linked list is empty" << endl;
-            return;
-        }
-
-        if (head->key == k) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-            cout << "Node with key " << k << " deleted" << endl;
-            return;
-        }
-
-        Node* prevptr = head;
-        Node* currptr = head->next;
-
-        while (currptr != NULL) {
-            if (currptr->key == k) {
-                prevptr->next = currptr->next;
-                delete currptr;
-                cout << "Node with key " << k << " deleted" << endl;
-                return;
-            }
-            prevptr = currptr;
-            currptr = currptr->next;
-        }
-
-        cout << "Node with key " << k << " not found" << endl;
-    }
-
-    void updatenode(int k, int d) {
-        Node* ptr = nodeexist(k);
-        if (ptr != NULL) {
-            ptr->data = d;
-            cout << "Node data updated for key " << k << endl;
-        } else {
-            cout << "Node with key " << k << " doesn't exist" << endl;
-        }
-    }
-
-    void printlist() {
-        if (head == NULL) {
-            cout << "No nodes in the list" << endl;
-            return;
-        }
-
-        cout << "List contents:" << endl;
-        Node* temp = head;
-        while (temp != NULL) {
-            cout << "(" << temp->key << ", " << temp->data << ") -> ";
-            temp = temp->next;
-        }
-        cout << "NULL" << endl;
-    }
-
-
-};
-int main()
-{
-    singly s;
-
-    Node* n1 = new Node(1, 10);
-    Node* n2 = new Node(1, 10);
-    Node* n3 = new Node(3, 30);
-
-    s.append(n1);
-    s.append(n2);
-    s.append(n3);
-
-    s.printlist();
-
-    s.prepend(new Node(6, 10));
-    s.printlist();
-
-    s.insert(2, new Node(4, 40));
-    s.printlist();
-
-    s.updatenode(1, 100);
-    s.printlist();
-
-    s.deleteNode(3);
-    s.deleteNode(6);
-    s.printlist();
-    Node* k=s.nodeexist(3);
-    if(k!=NULL)
-    {
-        cout<<("Node found with element ")<<k->data;
-    }
-    else
-    {
-        cout<<"Node does not exist";
-    }
-
-    return 0;
+def midpointEllipse(a, b):
+    x1 = []
+    y1 = []
+    x2 = []
+    y2 = []
+    x3 = []
+    y3 = []
+    x4 = []
+    y4 = []
     
     
-
-
-}
-
-
-
-
-STACKED LINKED LIST
-
-
-
-
-
-#include <iostream>
-using namespace std;
-
-// Node structure
-class Node {
-public:
-    int data;   // Data of the node
-    Node* next; // Pointer to the next node
-
-    // Constructor to initialize a node
-    Node(int value) {
-        data = value;
-        next = NULL;
-    }
-};
-
-// Stack class
-class Stack {
-private:
-    Node* top; // Pointer to the top element of the stack
-
-public:
-    // Constructor
-    Stack() {
-        top = NULL; // Initially, the stack is empty
-    }
-
-    // Function to check if the stack is empty
-    bool isEmpty() {
-        return top == NULL;
-    }
-
-    // Function to push an element onto the stack
-    void push(int value) {
-        Node* newNode = new Node(value); // Create a new node
-        newNode->next = top;            // Link the new node to the current top
-        top = newNode;                  // Update the top to the new node
-        cout << value << " pushed to stack." << endl;
-    }
-
-    // Function to pop the top element from the stack
-    int pop() {
-        if (isEmpty()) {
-            cout << "Stack is empty. Cannot pop." << endl;
-            return -1; // Return -1 to indicate an error
-        }
-        int poppedValue = top->data; // Get the value of the top node
-        Node* temp = top;           // Store the top node in a temporary variable
-        top = top->next;            // Update the top pointer
-        delete temp;                // Free the memory of the popped node
-        cout << "Popped: " << poppedValue << endl;
-        return poppedValue;
-    }
-
-    // Function to view the top element without removing it
-    int peek() {
-        if (isEmpty()) {
-            cout << "Stack is empty. No element to peek." << endl;
-            return -1; // Return -1 to indicate an error
-        }
-        return top->data; // Return the value of the top element
-    }
-
-    // Function to count the number of elements in the stack
-    int count() {
-        int counter = 0;
-        Node* temp = top;
-        while (temp != NULL) {
-            counter++;
-            temp = temp->next;
-        }
-        return counter;
-    }
-
-    // Function to change a value at a specific position
-    void change(int pos, int value) {
-        if (pos < 1 || pos > count()) {
-            cout << "Invalid position. Valid range is 1 to " << count() << "." << endl;
-            return;
-        }
-        Node* temp = top;
-        for (int i = 1; i < pos; i++) {
-            temp = temp->next; // Traverse to the specified position
-        }
-        temp->data = value; // Update the value
-        cout << "Value at position " << pos << " changed to " << value << "." << endl;
-    }
-
-    // Function to display the stack elements
-    void display() {
-        if (isEmpty()) {
-            cout << "Stack is empty." << endl;
-            return;
-        }
-        Node* temp = top;
-        cout << "Stack elements: ";
-        while (temp != NULL) {
-            cout << temp->data << " ";
-            temp = temp->next;
-        }
-        cout << endl;
-    }
-};
-
-int main() {
-    Stack stack; // Create a stack object
-
-    stack.push(10); // Push 10
-    stack.push(20); // Push 20
-    stack.push(30); // Push 30
-    stack.push(40); // Push 40
-
-    stack.display(); // Display stack elements
-
-    cout << "Top element is: " << stack.peek() << endl; // Peek at the top element
-    cout << "Number of elements in the stack: " << stack.count() << endl; // Count elements
-
-    stack.change(2, 25); // Change value at position 2
-    stack.display();     // Display stack again
-
-    stack.pop();         // Pop top element
-    stack.pop();         // Pop another element
-
-    cout << "After popping, number of elements in the stack: " << stack.count() << endl;
-    stack.display();     // Display stack again
-
-    return 0;
-}
-
-
-
-
-BST TREE
-
-
-
-
-#include <iostream>
-#include <queue>
-#include <limits>  // for std::numeric_limits
-using namespace std;
-
-template <class T>
-class Node {
-public:
-    T data;
-    Node<T>* left;
-    Node<T>* right;
-
-    Node(T d) {
-        this->data = d;
-        this->left = NULL;
-        this->right = NULL;
-    }
-};
-
-template <class T>
-class BST {
-private:
-    void Insert(Node<T>*& root, T d) {
-        if (root == NULL) {
-            root = new Node<T>(d);
-            return;
-        } else if (d < root->data)
-            Insert(root->left, d);
-        else
-            Insert(root->right, d);
-    }
-
-    Node<T>* Search(Node<T>* root, T d) {
-        while (root != NULL) {
-            if (root->data == d) return root;
-            if (root->data > d)
-                root = root->left;
-            else
-                root = root->right;
-        }
-        return NULL;
-    }
-
-    void preOrder(Node<T>* root) {
-        if (root == NULL) return;
-        cout << root->data << " ";
-        preOrder(root->left);
-        preOrder(root->right);
-    }
-
-    void inOrder(Node<T>* root) {
-        if (root == NULL) return;
-        inOrder(root->left);
-        cout << root->data << " ";
-        inOrder(root->right);
-    }
-
-    void postOrder(Node<T>* root) {
-        if (root == NULL) return;
-        postOrder(root->left);
-        postOrder(root->right);
-        cout << root->data << " ";
-    }
-
-    int Count(Node<T>* root) {
-        if (root == NULL) return 0;
-        return 1 + Count(root->left) + Count(root->right);
-    }
-
-    int CountLeafNode(Node<T>* root) {
-        if (root == NULL) return 0;
-        if (root->left == NULL && root->right == NULL) return 1;
-        return CountLeafNode(root->left) + CountLeafNode(root->right);
-    }
-
-    int CountNonLeafNode(Node<T>* root) {
-        if (root == NULL) return 0;
-        if (root->left == NULL && root->right == NULL) return 0;
-        return 1 + CountNonLeafNode(root->left) + CountNonLeafNode(root->right);
-    }
-
-    int Height(Node<T>* root) {
-        if (root == NULL) return -1;
-        return max(Height(root->left), Height(root->right)) + 1;
-    }
-
-    Node<T>* findMin(Node<T>* root) {
-        while (root && root->left) {
-            root = root->left;
-        }
-        return root;
-    }
-
-    Node<T>* DeleteValue(Node<T>*& root, T d) {
-        if (root == NULL) return NULL;
-        if (d < root->data)
-            root->left = DeleteValue(root->left, d);
-        else if (d > root->data)
-            root->right = DeleteValue(root->right, d);
-        else {
-            if (root->left == NULL) {
-                Node<T>* temp = root->right;
-                delete root;
-                return temp;
-            } else if (root->right == NULL) {
-                Node<T>* temp = root->left;
-                delete root;
-                return temp;
-            }
-
-            Node<T>* temp = findMin(root->right);
-            root->data = temp->data;
-            root->right = DeleteValue(root->right, temp->data);
-        }
-        return root;
-    }
-
-    // Helper function to check if a tree is a BST
-    bool isBST(Node<T>* root, T minValue, T maxValue) {
-        if (root == NULL) return true;  // Empty tree is a BST
-        if (root->data <= minValue || root->data >= maxValue)
-            return false;
-        return isBST(root->left, minValue, root->data) && 
-               isBST(root->right, root->data, maxValue);
-    }
-
-    // Helper function to check if two trees are equal
-    bool isEqual(Node<T>* root1, Node<T>* root2) {
-        if (root1 == NULL && root2 == NULL) return true;
-        if (root1 == NULL || root2 == NULL) return false;
-        return (root1->data == root2->data) && 
-               isEqual(root1->left, root2->left) && 
-               isEqual(root1->right, root2->right);
+    x = 0
+    y = b
+    d1 = (b**2) - (a**2 * b) + (0.25 * a**2)
     
-    }
-
-public:
-    Node<T>* root;
-    BST() {
-        root = NULL;
-    }
-
-    void insert(T d) {
-        Insert(root, d);
-    }
-
-    Node<T>* search(T d) {
-        return Search(root, d);
-    }
-
-    void displayPreOrder() {
-        preOrder(root);
-        cout << endl;
-    }
-
-    void displayInOrder() {
-        inOrder(root);
-        cout << endl;
-    }
-
-    void displayPostOrder() {
-        postOrder(root);
-        cout << endl;
-    }
-
-    int countTotalNode() {
-        return Count(root);
-    }
-
-    int countLeafNode() {
-        return CountLeafNode(root);
-    }
-
-    int countNonLeafNode() {
-        return CountNonLeafNode(root);
-    }
-
-    int height() {
-        return Height(root);
-    }
-
-    void deleteValue(T d) {
-        if (root == NULL) {
-            cout << "Tree is empty\n";
-            return;
-        } else
-            this->root = DeleteValue(this->root, d);
-    }
-
-    bool isBST() {
-        return isBST(root, std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
-    }
-
-    bool isEqual(BST<T>& otherTree) {
-        return isEqual(this->root, otherTree.root);
-    }
-};
-
-int main() {
-    BST<int> bst1;
-
-    bst1.insert(50);
-    bst1.insert(30);
-    bst1.insert(70);
-    bst1.insert(20);
-    bst1.insert(40);
-    bst1.insert(60);
-    bst1.insert(80);
-    bst1.displayInOrder();
-    bst1.displayPostOrder();
-    bst1.displayPreOrder();
-
-    cout << "InOrder Traversal: ";
-    bst1.displayInOrder();
-
-    cout << "Is the tree a BST? " << (bst1.isBST() ? "Yes" : "No") << endl;
-
-    // Create another tree
-    BST<int> bst2;
-    bst2.insert(50);
-    bst2.insert(30);
-    bst2.insert(70);
-    bst2.insert(20);
-    bst2.insert(40);
-    bst2.insert(60);
-    bst2.insert(80);
-
-    cout << "Are the two trees equal? " << (bst1.isEqual(bst2) ? "Yes" : "No") << endl;
-    bst2.displayInOrder();
-    bst2.deleteValue(40);
-    bst2.displayInOrder();
-
-    return 0;
-}
-
-
-
-
-
-QUEUE LINKED LIST
-
-
-
-
-#include <iostream>
-using namespace std;
-
-class Node {
-public:
-    int data;
-    Node* next;
-
-    // Constructor
-    Node(int d) {
-        data = d;
-        next = NULL;
-    }
-};
-
-class CircularQueue {
-private:
-    Node* rear; // Points to the last node (rear) of the queue
-
-public:
-    // Constructor
-    CircularQueue() {
-        rear = NULL;
-    }
-
-    // Function to check if the queue is empty
-    bool isEmpty() {
-        return rear == NULL;
-    }
-
-    // Function to enqueue (insert) an element into the queue
-    void enqueue(int value) {
-        Node* newNode = new Node(value);
-        if (isEmpty()) {
-            rear = newNode;
-            rear->next = rear; // Circular link
-        } else {
-            newNode->next = rear->next; // Link new node to the front
-            rear->next = newNode;      // Update rear's next to the new node
-            rear = newNode;            // Update rear to the new node
-        }
-        cout << value << " enqueued into the queue." << endl;
-    }
-
-    // Function to dequeue (remove) an element from the queue
-    void dequeue() {
-        if (isEmpty()) {
-            cout << "Queue is empty. Cannot dequeue." << endl;
-            return;
-        }
-        Node* temp = rear->next; // Front node to be deleted
-        if (rear->next == rear) {
-            // Only one node in the queue
-            rear = NULL;
-        } else {
-            rear->next = temp->next; // Update rear's next to the next of front
-        }
-        cout << temp->data << " dequeued from the queue." << endl;
-        delete temp; // Free memory
-    }
-
-    // Function to get the front element
-    int peekFront() {
-        if (isEmpty()) {
-            cout << "Queue is empty. No front element." << endl;
-            return -1;
-        }
-        return rear->next->data;
-    }
-
-    // Function to get the rear element
-    int peekRear() {
-        if (isEmpty()) {
-            cout << "Queue is empty. No rear element." << endl;
-            return -1;
-        }
-        return rear->data;
-    }
+    while (a**2 * (y - 0.5)) > (b**2 * (x + 1)):
+        if d1 < 0:
+            d1 += (b**2 * (2 * x + 3))
+        else:
+            d1 += (b**2 * (2 * x + 3)) + (a**2 * (-2 * y + 2))
+            y -= 1
+        x += 1
+        x1.append(x)
+        y1.append(y)
+        x2.append(-x)
+        y2.append(y)
+        x3.append(x)
+        y3.append(-y)
+        x4.append(-x)
+        y4.append(-y)
     
-     int count() {
-        if (isEmpty()) {
-            return 0;
-        }
-        int count = 0;
-        Node* temp = rear->next; // Start from the front
-        do {
-            count++;
-            temp = temp->next;
-        } while (temp != rear->next); // Stop when we circle back to the front
-        return count;
-    }
-
-    // Function to display the queue
-    void display() {
-        if (isEmpty()) {
-            cout << "Queue is empty." << endl;
-            return;
-        }
-        Node* temp = rear->next; // Start from the front
-        cout << "Queue elements: ";
-        do {
-            cout << temp->data << ", ";
-            temp = temp->next;
-        } while (temp != rear->next); // Stop when we circle back to the front
-        cout << endl;
-    }
-};
-
-int main() {
-    CircularQueue cq;
-
-    cq.enqueue(10);
-    cq.enqueue(20);
-    cq.enqueue(30);
-    cq.display();
-    cq.count();
-    cq.dequeue();
-    cq.display();
-
-    cout << "Front element: " << cq.peekFront() << endl;
-    cout << "Rear element: " << cq.peekRear() << endl;
-
-    cq.enqueue(40);
-    cq.enqueue(50);
-    cq.display();
-
-    return 0;
-}
-
-
-
-
-
-
-CIRCULAR LIST
-
-
-
-
-#include <iostream>
-using namespace std;
-
-class Node {
-public:
-    int key;
-    int data;
-    Node* next;
-
-    // Default constructor
-    Node() {
-        key = 0;
-        data = 0;
-        next = NULL;
-    }
-
-    // Parameterized constructor
-    Node(int k, int d) {
-        key = k;
-        data = d;
-        next = NULL;
-    }
-};
-
-class CircularLinkedList {
-public:
-    Node* head;
-
-    // Constructor
-    CircularLinkedList() {
-        head = NULL;
-    }
-
-    // Function to check if a node with a specific key exists
-    Node* nodeExist(int k) {
-        Node* temp = NULL;
-        Node* ptr = head;
-
-        if (ptr == NULL) {
-            return temp;
-        } else {
-            do {
-                if (ptr->key == k) {
-                    temp = ptr;
-                    break;
-                }
-                ptr = ptr->next;
-            } while (ptr != head);
-            return temp;
-        }
-    }
-
-    // Function to append a node
-    void appendNode(Node* new_node) {
-        if (nodeExist(new_node->key) != NULL) {
-            cout << "Node with key " << new_node->key << " already exists!" << endl;
-        } else {
-            if (head == NULL) {
-                head = new_node;
-                new_node->next = head;
-                cout << "Node appended at the beginning." << endl;
-            } else {
-                Node* ptr = head;
-                while (ptr->next != head) {
-                    ptr = ptr->next;
-                }
-                ptr->next = new_node;
-                new_node->next = head;
-                cout << "Node appended." << endl;
-            }
-        }
-    }
-
-    // Function to prepend a node
-    void prependNode(Node* new_node) {
-        if (nodeExist(new_node->key) != NULL) {
-            cout << "Node with key " << new_node->key << " already exists!" << endl;
-        } else {
-            if (head == NULL) {
-                head = new_node;
-                new_node->next = head;
-                cout << "Node prepended at the beginning." << endl;
-            } else {
-                Node* ptr = head;
-                while (ptr->next != head) {
-                    ptr = ptr->next;
-                }
-                ptr->next = new_node;
-                new_node->next = head;
-                head = new_node;
-                cout << "Node prepended." << endl;
-            }
-        }
-    }
-
-    // Function to insert a node after a specific key
-    void insertNode(int k, Node* new_node) {
-        Node* ptr = nodeExist(k);
-        if (ptr == NULL) {
-            cout << "No node exists with key " << k << "." << endl;
-        } else {
-            if (nodeExist(new_node->key) != NULL) {
-                cout << "Node with key " << new_node->key << " already exists!" << endl;
-            } else {
-                new_node->next = ptr->next;
-                ptr->next = new_node;
-                cout << "Node inserted after key " << k << "." << endl;
-            }
-        }
-    }
+    d2 = (b**2 * ((x + 0.5)**2)) + (a**2 * ((y - 1)**2)) - (a**2 * b**2)
     
-    
-    void deletenode(int k) {
-    Node* ptr = nodeExist(k);
-    if (ptr == NULL) {
-        cout << "Node does not exist with key value " << k << endl;
-        return;
-    }
-    
-    if (head == NULL) {
-        cout << "List is empty" << endl;
-        return;
-    }
-    
-    // Case 1: Deleting the head node
-    if (ptr == head) {
-        if (head->next == head) { // Single node in the circular list
-            head = NULL;
-            cout << "Head node deleted with key value " << k << endl;
-        } else {
-            Node* temp = head;
-            while (temp->next != head) {
-                temp = temp->next;
-            }
-            temp->next = head->next; // Update the last node to point to the new head
-            head = head->next;       // Update the head pointer
-            cout << "Head node deleted with key value " << k << endl;
-        }
-        return;
-    }
-    
-    // Case 2: Deleting a node other than the head
-    Node* prevptr = head;
-    Node* currentptr = head->next;
-    while (currentptr != head) { // Traverse until we circle back to the head
-        if (currentptr->key == k) {
-            prevptr->next = currentptr->next;
-            delete currentptr; // Free memory
-            cout << "Node deleted with key value " << k << endl;
-            return;
-        }
-        prevptr = currentptr;
-        currentptr = currentptr->next;
-    }
-    
-    cout << "Node with key value " << k << " not found" << endl;
-}
-
-    
-
-    // Display the list
-    void printList() {
-        if (head == NULL) {
-            cout << "The list is empty." << endl;
-        } else {
-            Node* ptr = head;
-            do {
-                cout << "(" << ptr->key << ", " << ptr->data << ") -> ";
-                ptr = ptr->next;
-            } while (ptr != head);
-            cout << "HEAD" << endl;
-        }
-    }
-    
-    
-    
-      // Function to concatenate two circular linked lists
-    void concatenate(CircularLinkedList& otherList) {
-        if (this->head == NULL) {
-            // If the first list is empty, simply set the head to the second list's head
-            this->head = otherList.head;
-        } else if (otherList.head == NULL) {
-            // If the second list is empty, there's nothing to concatenate
-            cout << "The second list is empty" << endl;
-            return;
-        } else {
-            // Find the last node of the first list
-            Node* ptr1 = this->head;
-            while (ptr1->next != this->head) {
-                ptr1 = ptr1->next;
-            }
-
-            // Find the last node of the second list
-            Node* ptr2 = otherList.head;
-            while (ptr2->next != otherList.head) {
-                ptr2 = ptr2->next;
-            }
-
-            // Connect the two lists
-            ptr1->next = otherList.head;
-            ptr2->next = this->head;
-
-            cout << "Lists concatenated successfully" << endl;
-        }
-    }
-};
-
-int main() {
-    CircularLinkedList cList,blist;
-
-    Node* node1 = new Node(1, 10);
-    cList.appendNode(node1);
+    while y > 0:
+        if d2 < 0:
+            d2 += (b**2 * (2 * x + 2)) + (a**2 * (-2 * y + 3))
+            x += 1
+        else:
+            d2 += (a**2 * (-2 * y + 3))
+        y -= 1
+        x1.append(x)
+        y1.append(y)
+        x2.append(-x)
+        y2.append(y)
+        x3.append(x)
+        y3.append(-y)
+        x4.append(-x)
+        y4.append(-y)
+        return x1,y1,x2,y2,x3,y3,x4,y4
+
+
+x1,y1,x2,y2,x3,y3,x4,y4=midpointEllipse(a,b)
+a = 1000
+b = 500
+midpointEllipse(a, b)
+plt.plot(x1, y1)
+plt.plot(x2, y2)
+plt.plot(x3, y3)
+plt.plot(x4, y4)
+
+
+
+*2D TRANSFORMATION*
+
+
+import numpy as np
+
+def translate(x, y):
+    """Translation matrix"""
+    return np.array([
+        [1, 0, x],
+        [0, 1, y],
+        [0, 0, 1]
+    ])
 
-    Node* node2 = new Node(2, 20);
-    cList.appendNode(node2);
+def rotate(theta):
+    """Rotation matrix (counter-clockwise)"""
+    c, s = np.cos(theta), np.sin(theta)
+    return np.array([
+        [c, -s, 0],
+        [s,  c, 0],
+        [0,  0, 1]
+    ])
+
+def scale(sx, sy):
+    """Scaling matrix"""
+    return np.array([
+        [sx, 0, 0],
+        [0, sy, 0],
+        [0,  0, 1]
+    ])
 
-    Node* node3 = new Node(3, 30);
-    cList.prependNode(node3);
+# Example usage
+point = np.array([2, 3, 1])  # Homogeneous coordinates
 
-    Node* node4 = new Node(4, 40);
-    cList.insertNode(2, node4);
-    Node* node5= new Node(5,50);
-    blist.appendNode(node5);
-    
-    cList.concatenate(blist);
+# Translate by (1, 2)
+translated_point = np.dot(translate(1, 2), point)
 
-    cList.printList();
-    
-    Node* foundNode = cList.nodeExist(2);
-    if (foundNode != NULL) {
-        cout << "Node found: (" << foundNode->key << ", " << foundNode->data << ")" << endl;
-    } else {
-        cout << "Node with key 2 does not exist." << endl;
-    }
+# Rotate by 45 degrees
+rotated_point = np.dot(rotate(np.pi/4), point)
 
-    return 0;
-}
-
-
-
-
-
-
-
-
-
-STACK ARRAY
-
-
-
-
-
-
-#include <iostream>
-using namespace std;
-
-class Stack {
-private:
-    int* arr;         // Array to hold stack elements
-    int top;          // Index of the top element in the stack
-    int capacity;     // Maximum size of the stack
-
-public:
-    // Constructor to initialize the stack
-    Stack(int size) {
-        capacity = size;
-        arr = new int[capacity];  // Dynamic memory allocation for stack
-        top = -1;  // Initialize top as -1 (indicating an empty stack)
-    }
+# Scale by (2, 0.5)
+scaled_point = np.dot(scale(2, 0.5), point)
 
-    // Destructor to free dynamically allocated memory
-    ~Stack() {
-        delete[] arr;
-    }
+print("Original point:", point[:2])
+print("Translated point:", translated_point[:2])
+print("Rotated point:", rotated_point[:2])
+print("Scaled point:", scaled_point[:2])
 
-    // Function to check if the stack is full
-    bool isFull() {
-        return top == capacity - 1;
-    }
 
-    // Function to check if the stack is empty
-    bool isEmpty() {
-        return top == -1;
-    }
-
-    // Function to view the top element without removing it
-    int peek() {
-        if (isEmpty()) {
-            cout << "Stack is empty. No element to peek." << endl;
-            return -1;  // Indicating an error
-        }
-        return arr[top];
-    }
-
-    // Function to count the number of elements in the stack
-    int count() {
-        return top + 1;
-    }
-
-    // Function to add an element to the stack
-    void push(int value) {
-        if (isFull()) {
-            cout << "Stack is full. Cannot push " << value << endl;
-            return;
-        }
-        arr[++top] = value;  // Increment top and insert the element
-        cout << value << " pushed to stack." << endl;
-    }
-
-    // Function to remove the top element from the stack
-    int pop() {
-        if (isEmpty()) {
-            cout << "Stack is empty. Cannot pop." << endl;
-            return -1;  // Indicating an error
-        }
-        int poppedValue = arr[top--];  // Return the top element and decrement top
-        cout << "Popped: " << poppedValue << endl;
-        return poppedValue;
-    }
-
-    // Function to change a value at a specific position
-    void change(int pos, int value) {
-        if (pos < 1 || pos > top + 1) {
-            cout << "Invalid position. Valid range is 1 to " << top + 1 << "." << endl;
-            return;
-        }
-        arr[pos - 1] = value;  // Update the value (convert 1-based index to 0-based index)
-        cout << "Value at position " << pos << " changed to " << value << "." << endl;
-    }
-
-    // Function to display the stack elements
-    void display() {
-        if (isEmpty()) {
-            cout << "Stack is empty." << endl;
-            return;
-        }
-        cout << "Stack elements: ";
-        for (int i = 0; i <= top; i++) {
-            cout << arr[i] << " ";
-        }
-        cout << endl;
-    }
-};
-
-int main() {
-    Stack stack(5);  // Create a stack of capacity 5
-
-    stack.push(10);   // Push 10
-    stack.push(20);   // Push 20
-    stack.push(50);   // Push 50
-    stack.push(60);   // Attempt to push 60 (should fail)
-
-    cout << "Is the stack full? " << (stack.isFull() ? "Yes" : "No") << endl;
-    cout << "Is the stack empty? " << (stack.isEmpty() ? "Yes" : "No") << endl;
-
-    cout << "Top element is: " << stack.peek() << endl;
-    cout << "Number of elements in the stack: " << stack.count() << endl;
-
-    stack.display();  // Display stack elements
-
-    stack.change(2, 25);  // Change the value at position 2
-    stack.display();      // Display stack again to verify the change
-
-    stack.pop();          // Pop top element
-    stack.pop();          // Pop another element
-
-    cout << "After popping, number of elements in the stack: " << stack.count() << endl;
-
-    stack.display();      // Display stack again
-
-    return 0;
-}
-
-
-
-
-
-
-
-
-QUEUE ARRAY
-
-
-
-
-
-#include <iostream>
-using namespace std;
-
-class CircularQueue {
-private:
-    int *arr;          // Pointer to the circular array
-    int front;         // Points to the front of the queue
-    int rear;          // Points to the rear of the queue
-    int size;          // Maximum size of the queue
-    int count;         // Current number of elements in the queue
-
-public:
-    // Constructor to initialize the queue
-    CircularQueue(int s) {
-        size = s;
-        arr = new int[size];
-        front = -1;
-        rear = -1;
-        count = 0;
-    }
-
-    // Destructor to free allocated memory
-    ~CircularQueue() {
-        delete[] arr;
-    }
-
-    // Function to check if the queue is full
-    bool isFull() {
-        return count == size;
-    }
-
-    // Function to check if the queue is empty
-    bool isEmpty() {
-        return count == 0;
-    }
-
-    // Function to add an element to the queue
-    void enqueue(int value) {
-        if (isFull()) {
-            cout << "Queue is full. Cannot enqueue " << value << "." << endl;
-            return;
-        }
-        rear = (rear + 1) % size; // Circular increment
-        arr[rear] = value;
-        if (front == -1) { // If the queue was empty
-            front = rear;
-        }
-        count++;
-        cout << value << " enqueued into the queue." << endl;
-    }
-
-    // Function to remove an element from the queue
-    void dequeue() {
-        if (isEmpty()) {
-            cout << "Queue is empty. Cannot dequeue." << endl;
-            return;
-        }
-        cout << arr[front] << " dequeued from the queue." << endl;
-        front = (front + 1) % size; // Circular increment
-        count--;
-        if (count == 0) { // Reset front and rear if the queue becomes empty
-            front = -1;
-            rear = -1;
-        }
-    }
-
-    // Function to get the front element
-    int peekFront() {
-        if (isEmpty()) {
-            cout << "Queue is empty. No front element." << endl;
-            return -1;
-        }
-        return arr[front];
-    }
-
-    // Function to get the rear element
-    int peekRear() {
-        if (isEmpty()) {
-            cout << "Queue is empty. No rear element." << endl;
-            return -1;
-        }
-        return arr[rear];
-    }
-
-    // Function to get the current size of the queue
-    int sizeOfQueue() {
-        return count;
-    }
-
-    // Function to display the elements of the queue
-    void display() {
-        if (isEmpty()) {
-            cout << "Queue is empty." << endl;
-            return;
-        }
-        cout << "Queue elements: ";
-        for (int i = 0; i < count; i++) {
-            cout << arr[(front + i) % size] << " ";
-        }
-        cout << endl;
-    }
-};
-
-int main() {
-    CircularQueue cq(5); // Create a queue with size 5
-
-    cq.enqueue(10);
-    cq.enqueue(50);
-    cq.display();
-
-    cq.dequeue();
-    cq.dequeue();
-    cq.display();
-
-    cq.enqueue(60);
-    cq.enqueue(70);
-    cq.display();
-    cout<<"Size is:"<<cq.sizeOfQueue()<<endl;
-
-    cout << "Front element: " << cq.peekFront() << endl;
-    cout << "Rear element: " << cq.peekRear() << endl;
-
-    return 0;
-}
-
-
-
-
-
-
-
-PRE POST FIX
-
-
-
-
-#include <iostream>
-#include <cctype>
-#include <cmath>
-#include <string>
-#include <sstream>
-#include <algorithm>
-using namespace std;
-
-// StackArray class
-class StackArray {
-private:
-    int *arr;
-    int cap;
-    int top;
-
-public:
-    StackArray(int cap) {
-        this->cap = cap;
-        arr = new int[cap];
-        top = -1;
-    }
-
-    ~StackArray() {
-        delete[] arr;
-    }
-
-    bool isEmpty() {
-        return top == -1;
-    }
-
-    void push(int x) {
-        if (top < cap - 1) {
-            arr[++top] = x;
-        } else {
-            cout << "Stack Overflow!" << endl;
-        }
-    }
-
-    void pop() {
-        if (top >= 0) {
-            top--;
-        } else {
-            cout << "Stack Underflow!" << endl;
-        }
-    }
-
-    int peek() {
-        if (!isEmpty()) {
-            return arr[top];
-        } else {
-            cout << "Stack is empty!" << endl;
-            return -1;
-        }
-    }
-};
-
-bool isOperator(char c) {
-    return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
-}
-
-int getPrecedence(char c) {
-    if (c == '^') return 3;  // Right associative
-    if (c == '*' || c == '/') return 2;
-    if (c == '+' || c == '-') return 1;
-    return -1;
-}
-
-// Convert Infix to Postfix
-string infixToPostfix(const string &infix) {
-    StackArray ops(infix.length());
-    string postfix = "";
-    for (int i = 0; i < infix.length(); i++) {
-        char c = infix[i];
+
+*POLYGON SCAN LINE FILL*
+
+
+def scanline_fill(polygon, image):
+    # Create a mask for the polygon
+    mask = np.zeros(image.shape, dtype=np.uint8)
+
+    # Get the bounds of the polygon
+    min_x = int(min(polygon[:, 0]))
+    max_x = int(max(polygon[:, 0]))
+    min_y = int(min(polygon[:, 1]))
+    max_y = int(max(polygon[:, 1]))
+
+    # Process each scanline
+    for y in range(min_y, max_y + 1):
+        intersections = []
+        for i in range(len(polygon)):
+            p1 = polygon[i]
+            p2 = polygon[(i + 1) % len(polygon)]
+            if (p1[1] > y) != (p2[1] > y):  # Check if y intersects
+                x = (p2[0] - p1[0]) * (y - p1[1]) / (p2[1] - p1[1]) + p1[0]
+                intersections.append(x)
+
+        intersections.sort()
+        for j in range(0, len(intersections), 2):
+            x_start = int(np.ceil(intersections[j]))
+            x_end = int(np.floor(intersections[j + 1]))
+            mask[y, x_start:x_end + 1] = 255
+
+    return mask
+
+# Example Usage
+polygon = np.array([[200, 300], [300, 200], [325, 350]])
+image = np.zeros((400, 400), dtype=np.uint8)
+
+filled_image = scanline_fill(polygon, image)
+
+plt.imshow(filled_image, cmap='gray')
+plt.title("Polygon Filling using Scanline Algorithm")
+plt.show()
+
+*DDA*
+
+
+
+import matplotlib.pyplot as plt
+x1 = int(input("enter the value of x1: "))
+x2 = int(input("enter the value of x2: "))
+y1 = int(input("enter the value of y1: "))
+y2 = int(input("enter the value of y2: "))
+dx = x2 - x1
+dy = y2 - y1
+
+steps = max(dx,dy)
+
+xinc = dx/steps
+yinc = dy/steps
+
+i = 0
+
+x_co =[] 
+y_co =[]
+
+while i < steps:
+    i+=1
+    x1 += xinc
+    y1 += yinc
+    print("x1: ", x1 , "y1: ",y1)
+    x_co.append(x1)
+    y_co.append(y1)
+
+plt.plot(x_co,y_co)
+plt.xlabel("X-Axis")
+plt.ylabel("Y-Axis")
+
+plt.title("DDA Algorithm")
+plt.show()
+
+
+
+*MIDPOINT CIRCLE*
+
+
+
+def circle():
+    x1=[]
+    x2=[]
+    x3=[]
+    x4=[]
+    x5=[]
+    x6=[]
+    x7=[]
+    x8=[]
+    y1=[]
+    y2=[]
+    y3=[]
+    y4=[]
+    y5=[]
+    y6=[]
+    y7=[]
+    y8=[]
+    x=0
+    r=int(input('Enter the radius : '))
+    y=r
+    d=1 - r
+    while(y>x) :
+        if (d<0):
+            d += 2*x +3
+        else :
+            d += 2*(x-y) +5
+            x1.append(x)
+            x2.append(y)
+            x3.append(-y)
+            x4.append(x)
+            x5.append(-x)
+            x6.append(-y)
+            x7.append(-x)
+            x8.append(y)
+            
+            y-=1
+            
+            y1.append(y)
+            y2.append(x)
+            y3.append(x)
+            y4.append(-y)
+            y5.append(-y)
+            y6.append(-x)
+            y7.append(y)
+            y8.append(-x)
         
-        if (isalnum(c)) {  // If the character is an operand (number or letter)
-            postfix += c;
-        } else if (c == '(') {
-            ops.push(c);
-        } else if (c == ')') {
-            while (!ops.isEmpty() && ops.peek() != '(') {
-                postfix += ops.peek();
-                ops.pop();
-            }
-            ops.pop();  // Discard '('
-        } else if (isOperator(c)) {
-            while (!ops.isEmpty() && getPrecedence(c) <= getPrecedence(ops.peek())) {
-                postfix += ops.peek();
-                ops.pop();
-            }
-            ops.push(c);
-        }
-    }
+            
+        x+=1
+    plt.plot(x1,y1,color ='red')
+    plt.plot(x2,y2,color ='gold' )
+    plt.plot(x3,y3,color ='gold')
+    plt.plot(x4,y4,color='red')
+    plt.plot(x5,y5,color ='red')
+    plt.plot(x6,y6,color='gold')
+    plt.plot(x7,y7,color ='red')
+    plt.plot(x8,y8,color='gold')
 
-    while (!ops.isEmpty()) {
-        postfix += ops.peek();
-        ops.pop();
-    }
-    return postfix;
-}
+circle()
 
-// Convert Infix to Prefix (by reversing the infix, applying postfix conversion, then reversing the result)
-string infixToPrefix(const string &infix) {
-    string reversedInfix = infix;
-    reverse(reversedInfix.begin(), reversedInfix.end());
 
-    // Reverse brackets for correct processing
-    for (int i = 0; i < reversedInfix.length(); i++) {
-        if (reversedInfix[i] == '(') {
-            reversedInfix[i] = ')';
-        } else if (reversedInfix[i] == ')') {
-            reversedInfix[i] = '(';
-        }
-    }
 
-    string postfix = infixToPostfix(reversedInfix);
-    reverse(postfix.begin(), postfix.end());
-    return postfix;
-}
 
-// Evaluate Postfix Expression
-int evaluatePostfix(const string &postfix) {
-    StackArray values(postfix.length());
-    for (int i = 0; i < postfix.length(); i++) {
-        char c = postfix[i];
+*BRESENHAM LINE*
+
+
+
+import matplotlib.pyplot as plt
+
+def bresenham_line(x1, y1, x2, y2):
+    """
+    Bresenham's Line Drawing Algorithm.
+    :param x1: Starting x-coordinate
+    :param y1: Starting y-coordinate
+    :param x2: Ending x-coordinate
+    :param y2: Ending y-coordinate
+    :return: List of points on the line
+    """
+    points = []  # List to store the points of the line
+    
+    dx = abs(x2 - x1)
+    dy = abs(y2 - y1)
+    sx = 1 if x2 > x1 else -1
+    sy = 1 if y2 > y1 else -1
+    
+    if dx > dy:
+        err = dx // 2
+        while x1 != x2:
+            points.append((x1, y1))
+            err -= dy
+            if err < 0:
+                y1 += sy
+                err += dx
+            x1 += sx
+    else:
+        err = dy // 2
+        while y1 != y2:
+            points.append((x1, y1))
+            err -= dx
+            if err < 0:
+                x1 += sx
+                err += dy
+            y1 += sy
+
+    points.append((x2, y2))  # Add the last point
+    return points
+
+# Define the starting and ending points of the line
+x_start, y_start = 2, 3
+x_end, y_end = 15, 10
+
+# Get the points using Bresenham's algorithm
+line_points = bresenham_line(x_start, y_start, x_end, y_end)
+
+# Extract X and Y coordinates for plotting
+x_coords, y_coords = zip(*line_points)
+
+# Plot the points
+plt.figure(figsize=(8, 8))
+plt.scatter(x_coords, y_coords, color="blue", label="Bresenham Line", zorder=5)
+plt.plot(x_coords, y_coords, color="red", linestyle="--", alpha=0.5)
+
+# Annotate the start and end points
+plt.scatter([x_start, x_end], [y_start, y_end], color="green", zorder=6, label="Start/End Points")
+plt.text(x_start, y_start, f"Start ({x_start}, {y_start})", color="green", fontsize=10)
+plt.text(x_end, y_end, f"End ({x_end}, {y_end})", color="green", fontsize=10)
+
+# Add grid, labels, and legend
+plt.grid(color="gray", linestyle="--", linewidth=0.5)
+plt.title("Bresenham's Line Drawing Algorithm", fontsize=14)
+plt.xlabel("X-axis", fontsize=12)
+plt.ylabel("Y-axis", fontsize=12)
+plt.axhline(0, color="black", linewidth=0.5)
+plt.axvline(0, color="black", linewidth=0.5)
+plt.legend()
+plt.gca().set_aspect('equal', adjustable='box')
+plt.show()
+
+
+
+*SUGER HODEMAN POLYGON CLIP*
+
+
+
+import matplotlib.pyplot as plt
+
+def inside(point, edge):
+    """
+    Check if a point is inside a given edge.
+    :param point: A tuple (x, y).
+    :param edge: A tuple ((x1, y1), (x2, y2)) representing the clipping edge.
+    :return: True if the point is inside, otherwise False.
+    """
+    x, y = point
+    (x1, y1), (x2, y2) = edge
+    return (x2 - x1) * (y - y1) - (y2 - y1) * (x - x1) >= 0
+
+def compute_intersection(p1, p2, edge):
+    """
+    Compute the intersection of a line segment with a clipping edge.
+    :param p1: Start point of the line segment (x1, y1).
+    :param p2: End point of the line segment (x2, y2).
+    :param edge: A tuple ((x1, y1), (x2, y2)) representing the clipping edge.
+    :return: Intersection point (x, y).
+    """
+    (x1, y1), (x2, y2) = edge
+    dx = p2[0] - p1[0]
+    dy = p2[1] - p1[1]
+    edge_dx = x2 - x1
+    edge_dy = y2 - y1
+
+    if dx * edge_dy == dy * edge_dx:
+        return None  # Parallel lines (shouldn't happen in a convex polygon)
+    
+    t = ((x1 - p1[0]) * edge_dy - (y1 - p1[1]) * edge_dx) / (dx * edge_dy - dy * edge_dx)
+    return (p1[0] + t * dx, p1[1] + t * dy)
+
+def sutherland_hodgman(polygon, clip_window):
+    """
+    Sutherland-Hodgman Polygon Clipping Algorithm.
+    :param polygon: List of points [(x1, y1), (x2, y2), ...] representing the polygon.
+    :param clip_window: List of points [(x1, y1), (x2, y2), ...] representing the clipping window.
+    :return: List of points representing the clipped polygon.
+    """
+    output_list = polygon
+    for i in range(len(clip_window)):
+        input_list = output_list
+        output_list = []
         
-        if (isdigit(c)) {
-            values.push(c - '0');  // Push numeric value
-        } else if (isOperator(c)) {
-            int operand2 = values.peek();
-            values.pop();
-            int operand1 = values.peek();
-            values.pop();
-
-            switch (c) {
-                case '+': values.push(operand1 + operand2); break;
-                case '-': values.push(operand1 - operand2); break;
-                case '*': values.push(operand1 * operand2); break;
-                case '/': values.push(operand1 / operand2); break;
-                case '^': values.push(pow(operand1, operand2)); break;  // Use `pow` for exponentiation
-            }
-        }
-    }
-    return values.peek();
-}
-
-// Evaluate Prefix Expression
-int evaluatePrefix(const string &prefix) {
-    StackArray values(prefix.length());
-    for (int i = prefix.length() - 1; i >= 0; i--) {
-        char c = prefix[i];
+        clip_edge = (clip_window[i], clip_window[(i + 1) % len(clip_window)])
         
-        if (isdigit(c)) {
-            values.push(c - '0');  // Push numeric value
-        } else if (isOperator(c)) {
-            int operand1 = values.peek();
-            values.pop();
-            int operand2 = values.peek();
-            values.pop();
+        for j in range(len(input_list)):
+            current_point = input_list[j]
+            prev_point = input_list[j - 1]
+            
+            if inside(current_point, clip_edge):
+                if not inside(prev_point, clip_edge):
+                    output_list.append(compute_intersection(prev_point, current_point, clip_edge))
+                output_list.append(current_point)
+            elif inside(prev_point, clip_edge):
+                output_list.append(compute_intersection(prev_point, current_point, clip_edge))
+    
+    return output_list
+
+# Define the polygon and clipping window
+polygon = [(1, 2), (4, 5), (7, 2), (6, -1), (2, -1)]  # Polygon vertices
+clip_window = [(2, 1), (6, 1), (6, -2), (2, -2)]      # Clipping window vertices (rectangular)
+
+# Apply the clipping algorithm
+clipped_polygon = sutherland_hodgman(polygon, clip_window)
+
+# Extract coordinates for plotting
+polygon_x, polygon_y = zip(*polygon + [polygon[0]])  # Close the polygon loop
+clip_x, clip_y = zip(*clip_window + [clip_window[0]])  # Close the clipping window loop
+if clipped_polygon:
+    clipped_x, clipped_y = zip(*clipped_polygon + [clipped_polygon[0]])  # Close the clipped polygon loop
+else:
+    clipped_x, clipped_y = [], []  # No points in the clipped polygon
+
+# Plot the original polygon, clipping window, and clipped polygon
+plt.figure(figsize=(10, 8))
+
+# Original polygon
+plt.plot(polygon_x, polygon_y, 'b-', label="Original Polygon", linewidth=2)
+plt.scatter(*zip(*polygon), color='blue')
+
+# Clipping window
+plt.plot(clip_x, clip_y, 'r--', label="Clipping Window", linewidth=2)
+plt.scatter(*zip(*clip_window), color='red')
+
+# Clipped polygon
+if clipped_polygon:
+    plt.plot(clipped_x, clipped_y, 'g-', label="Clipped Polygon", linewidth=2)
+    plt.scatter(clipped_x, clipped_y, color='green')
+
+# Add grid, labels, and legend
+plt.grid(color="gray", linestyle="--", linewidth=0.5)
+plt.title("Sutherland-Hodgman Polygon Clipping", fontsize=14)
+plt.xlabel("X-axis", fontsize=12)
+plt.ylabel("Y-axis", fontsize=12)
+plt.axhline(0, color="black", linewidth=0.5)
+plt.axvline(0, color="black", linewidth=0.5)
+plt.legend()
+plt.gca().set_aspect('equal', adjustable='box')
+plt.show()
+
+
+
+*COEHN SUTHERLAND LINE CLIPPING*
+
+
+
+
+
+def compute_outcode(x, y, xmin, xmax, ymin, ymax):
+  
+  code = 0
+  if y > ymax:
+    code |= 1  # Top
+  elif y < ymin:
+    code |= 2  # Bottom
+  if x > xmax:
+    code |= 4  # Right
+  elif x < xmin:
+    code |= 8  # Left
+  return code
+
+
+def cohen_sutherland_line_clip(x0, y0, x1, y1, xmin, xmax, ymin, ymax):
+  
+
+  outcode0 = compute_outcode(x0, y0, xmin, xmax, ymin, ymax)
+  outcode1 = compute_outcode(x1, y1, xmin, xmax, ymin, ymax)
+  accept = False
+
+  while True:
+    if not (outcode0 | outcode1):  # Both endpoints inside clip window
+      accept = True
+      break
+    elif outcode0 & outcode1:  # Both endpoints outside on same side
+      break
+    else:  # Calculate intersection point with clip edge
+      x = 0
+      y = 0
+      outcode_out = outcode0 if outcode0 else outcode1
+
+      if outcode_out & 1:  # Top edge
+        x = x0 + (x1 - x0) * (ymax - y0) / (y1 - y0)
+        y = ymax
+      elif outcode_out & 2:  # Bottom edge
+        x = x0 + (x1 - x0) * (ymin - y0) / (y1 - y0)
+        y = ymin
+      elif outcode_out & 4:  # Right edge
+        y = y0 + (y1 - y0) * (xmax - x0) / (x1 - x0)
+        x = xmax
+      elif outcode_out & 8:  # Left edge
+        y = y0 + (y1 - y0) * (xmin - x0) / (x1 - x0)
+        x = xmin
 
-            switch (c) {
-                case '+': values.push(operand1 + operand2); break;
-                case '-': values.push(operand1 - operand2); break;
-                case '*': values.push(operand1 * operand2); break;
-                case '/': values.push(operand1 / operand2); break;
-                case '^': values.push(pow(operand1, operand2)); break;  // Use `pow` for exponentiation
-            }
-        }
-    }
-    return values.peek();
-}
+     
+      if outcode_out == outcode0:
+        x0 = x
+        y0 = y
+        outcode0 = compute_outcode(x0, y0, xmin, xmax, ymin, ymax)
+      else:
+        x1 = x
+        y1 = y
+        outcode1 = compute_outcode(x1, y1, xmin, xmax, ymin, ymax)
 
-// Main Function
-int main() {
-    string infix = "6/(3+1)*2^3-5"; 
-    cout << "Infix expression: " << infix << endl;
-
-    // Convert to Postfix
-    string postfix = infixToPostfix(infix);
-    cout << "Converted to Postfix: " << postfix << endl;
-    int resultPostfix = evaluatePostfix(postfix);
-    cout << "Postfix Evaluation Result: " << resultPostfix << endl;
-
-    // Convert to Prefix
-    string prefix = infixToPrefix(infix);
-    cout << "Converted to Prefix: " << prefix << endl;
-    int resultPrefix = evaluatePrefix(prefix);
-    cout << "Prefix Evaluation Result: " << resultPrefix << endl;
+  return accept, x0, y0, x1, y1
 
-    return 0;
-}
 
+xmin, xmax, ymin, ymax = 10, 250, 30, 350
+x0, y0, x1, y1 = 10, 10, 350, 260
 
+accept, clipped_x0, clipped_y0, clipped_x1, clipped_y1 = cohen_sutherland_line_clip(
+    x0, y0, x1, y1, xmin, xmax, ymin, ymax
+)
 
+if accept:
+  print("Clipped Line:", (clipped_x0, clipped_y0), (clipped_x1, clipped_y1))
+else:
+  print("Line is completely outside the clip window")
 
 
+plt.figure(figsize=(8, 8))
+plt.xlim(0, 500)
+plt.ylim(0, 500)
 
-AVL TREE
-
 
+plt.gca().add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, fill=False))
 
-
-#include <iostream>
-#include <algorithm>
-using namespace std;
-
-// AVL Tree Node
-struct Node {
-    int key;
-    Node* left;
-    Node* right;
-    int height;
-
-    Node(int k) : key(k), left(nullptr), right(nullptr), height(1) {}
-};
-
-// AVL Tree class
-class AVLTree {
-private:
-    Node* root;
-
-    // Get the height of a node
-    int height(Node* node) {
-        return node ? node->height : 0;
-    }
-
-    // Get the balance factor of a node
-    int getBalance(Node* node) {
-        return node ? height(node->left) - height(node->right) : 0;
-    }
-
-    // Right rotation
-    Node* rightRotate(Node* y) {
-        Node* x = y->left;
-        Node* T2 = x->right;
-
-        // Perform rotation
-        x->right = y;
-        y->left = T2;
-
-        // Update heights
-        y->height = max(height(y->left), height(y->right)) + 1;
-        x->height = max(height(x->left), height(x->right)) + 1;
-
-        // Return new root
-        return x;
-    }
-
-    // Left rotation
-    Node* leftRotate(Node* x) {
-        Node* y = x->right;
-        Node* T2 = y->left;
-
-        // Perform rotation
-        y->left = x;
-        x->right = T2;
-
-        // Update heights
-        x->height = max(height(x->left), height(x->right)) + 1;
-        y->height = max(height(y->left), height(y->right)) + 1;
-
-        // Return new root
-        return y;
-    }
-
-    // Insert a new node in the subtree rooted with node
-    Node* insert(Node* node, int key) {
-        // 1. Perform the normal BST insert
-        if (!node) return new Node(key);
-
-        if (key < node->key)
-            node->left = insert(node->left, key);
-        else if (key > node->key)
-            node->right = insert(node->right, key);
-        else // Duplicates are not allowed in the AVL tree
-            return node;
-
-        // 2. Update the height of this ancestor node
-        node->height = 1 + max(height(node->left), height(node->right));
-
-        // 3. Get the balance factor to check whether this node became unbalanced
-        int balance = getBalance(node);
-
-        // 4. If this node becomes unbalanced, then there are 4 cases
-
-        // Left Left Case
-        if (balance > 1 && key < node->left->key)
-            return rightRotate(node);
-
-        // Right Right Case
-        if (balance < -1 && key > node->right->key)
-            return leftRotate(node);
-
-        // Left Right Case
-        if (balance > 1 && key > node->left->key) {
-            node->left = leftRotate(node->left);
-            return rightRotate(node);
-        }
-
-        // Right Left Case
-        if (balance < -1 && key < node->right->key) {
-            node->right = rightRotate(node->right);
-            return leftRotate(node);
-        }
-
-        // Return the (unchanged) node pointer
-        return node;
-    }
-
-    // Inorder traversal of the tree
-    void inorder(Node* node) {
-        if (node) {
-            inorder(node->left);
-            cout << node->key << " ";
-            inorder(node->right);
-        }
-    }
-
-    // Delete a node with a given key
-    Node* deleteNode(Node* root, int key) {
-        if (!root) return root;
-
-        // Step 1: Perform standard BST delete
-        if (key < root->key)
-            root->left = deleteNode(root->left, key);
-        else if (key > root->key)
-            root->right = deleteNode(root->right, key);
-        else {
-            // Node with only one child or no child
-            if (!root->left) {
-                Node* temp = root->right;
-                delete root;
-                return temp;
-            } else if (!root->right) {
-                Node* temp = root->left;
-                delete root;
-                return temp;
-            }
-
-            // Node with two children: Get the inorder successor
-            Node* temp = minValueNode(root->right);
-
-            // Copy the inorder successor's content to this node
-            root->key = temp->key;
-
-            // Delete the inorder successor
-            root->right = deleteNode(root->right, temp->key);
-        }
-
-        // Step 2: Update the height of the current node
-        root->height = max(height(root->left), height(root->right)) + 1;
-
-        // Step 3: Get the balance factor of this node to check whether this node became unbalanced
-        int balance = getBalance(root);
-
-        // 4 cases to balance the tree
-
-        // Left Left Case
-        if (balance > 1 && getBalance(root->left) >= 0)
-            return rightRotate(root);
-
-        // Left Right Case
-        if (balance > 1 && getBalance(root->left) < 0) {
-            root->left = leftRotate(root->left);
-            return rightRotate(root);
-        }
-
-        // Right Right Case
-        if (balance < -1 && getBalance(root->right) <= 0)
-            return leftRotate(root);
-
-        // Right Left Case
-        if (balance < -1 && getBalance(root->right) > 0) {
-            root->right = rightRotate(root->right);
-            return leftRotate(root);
-        }
-
-        return root;
-    }
-
-    // Find the node with the smallest key in the subtree
-    Node* minValueNode(Node* node) {
-        Node* current = node;
-        while (current && current->left)
-            current = current->left;
-        return current;
-    }
-
-    // Search for a key in the AVL tree
-    Node* search(Node* node, int key) {
-        // Base cases: root is null or key is present at the node
-        if (node == nullptr || node->key == key)
-            return node;
-
-        // Key is greater than the root's key
-        if (key > node->key)
-            return search(node->right, key);
-
-        // Key is smaller than the root's key
-        return search(node->left, key);
-    }
-
-public:
-    AVLTree() : root(nullptr) {}
-
-    // Insert a key into the AVL tree
-    void insert(int key) {
-        root = insert(root, key);
-    }
-
-    // Delete a key from the AVL tree
-    void deleteKey(int key) {
-        root = deleteNode(root, key);
-    }
-
-    // Print the inorder traversal of the tree
-    void inorder() {
-        inorder(root);
-        cout << endl;
-    }
-
-    // Search for a key in the AVL tree
-    bool search(int key) {
-        Node* result = search(root, key);
-        return result != nullptr;
-    }
-};
-
-int main() {
-    AVLTree tree;
-
-    // Insert elements
-    tree.insert(10);
-    tree.insert(20);
-    tree.insert(30);
-    tree.insert(15);
-    tree.insert(25);
-
-    // Print inorder traversal
-    cout << "Inorder traversal: ";
-    tree.inorder();
-
-    // Search for keys
-    cout << "Search for 20: " << (tree.search(20) ? "Found" : "Not Found") << endl;
-    cout << "Search for 100: " << (tree.search(100) ? "Found" : "Not Found") << endl;
-
-    // Delete a node
-    tree.deleteKey(20);
-
-    // Print inorder traversal after deletion
-    cout << "Inorder traversal after deletion: ";
-    tree.inorder();
-
-    return 0;
-}
 
+plt.plot([x0, x1], [y0, y1], 'b', label='Original Line')
+
+
+if accept:
+  plt.plot([clipped_x0, clipped_x1], [clipped_y0, clipped_y1], 'r', label='Clipped Line')
+
+plt.legend()
+plt.show()
