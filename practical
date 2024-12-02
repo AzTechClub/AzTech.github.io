@@ -1,6 +1,8 @@
 *HERMET BEZIER*
 
 
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -75,7 +77,15 @@ plt.show()
 
 
 
+
+
+
+
 *ELLIPSE*
+
+
+
+
 
 
 import matplotlib.pyplot as plt
@@ -142,7 +152,16 @@ plt.plot(x4, y4)
 
 
 
+
+
+
+
+
 *2D TRANSFORMATION*
+
+
+
+
 
 
 import numpy as np
@@ -191,7 +210,16 @@ print("Scaled point:", scaled_point[:2])
 
 
 
+
+
+
+
+
 *POLYGON SCAN LINE FILL*
+
+
+
+
 
 
 def scanline_fill(polygon, image):
@@ -232,7 +260,15 @@ plt.imshow(filled_image, cmap='gray')
 plt.title("Polygon Filling using Scanline Algorithm")
 plt.show()
 
+
+
+
+
+
 *DDA*
+
+
+
 
 
 
@@ -271,7 +307,15 @@ plt.show()
 
 
 
+
+
+
+
+
 *MIDPOINT CIRCLE*
+
+
+
 
 
 
@@ -337,7 +381,15 @@ circle()
 
 
 
+
+
+
+
 *BRESENHAM LINE*
+
+
+
+
 
 
 
@@ -414,7 +466,15 @@ plt.show()
 
 
 
+
+
+
+
 *SUGER HODEMAN POLYGON CLIP*
+
+
+
+
 
 
 
@@ -522,7 +582,17 @@ plt.show()
 
 
 
+
+
+
+
+
 *COEHN SUTHERLAND LINE CLIPPING*
+
+
+
+
+
 
 
 
